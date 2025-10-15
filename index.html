@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rita Panthi Cloth Shop</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif;}
+body{background:#fff8f2;color:#333;}
+header{background:#ff4c4c;color:white;display:flex;justify-content:space-between;align-items:center;padding:15px 30px;flex-wrap:wrap;box-shadow:0 4px 10px rgba(0,0,0,0.1);}
+header h1{font-size:26px;}
+.logo{width:65px;height:65px;border-radius:50%;overflow:hidden;border:2px solid white;}
+.logo img{width:100%;height:100%;object-fit:contain;}
+.hero{background:url('https://images.unsplash.com/photo-1603874971144-8b58f29f0e2f?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;height:380px;display:flex;align-items:center;justify-content:center;color:white;font-size:34px;font-weight:bold;text-shadow:2px 2px 6px #000;animation:floatText 3s ease-in-out infinite;text-align:center;padding:0 10px;}
+@keyframes floatText{0%{transform:rotateX(0deg) rotateY(0deg);}25%{transform:rotateX(4deg) rotateY(-4deg);}50%{transform:rotateX(-4deg) rotateY(4deg);}75%{transform:rotateX(4deg) rotateY(4deg);}100%{transform:rotateX(0deg) rotateY(0deg);}}
+.container{padding:20px;max-width:1200px;margin:auto;}
+h2{color:#ff4c4c;margin-bottom:15px;}
+.categories{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+.category-btn{background:#ff4c4c;color:white;padding:10px 18px;border:none;border-radius:8px;cursor:pointer;transition:0.2s;font-weight:bold;}
+.category-btn:hover{background:#e63939;}
+.items{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;}
+.item{background:white;border-radius:15px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);transition:transform 0.2s;cursor:pointer;position:relative;}
+.item:hover{transform:scale(1.05);}
+.item img{width:100%;height:230px;object-fit:cover;}
+.item-content{padding:12px;}
+.item-content h3{margin:8px 0 4px;color:#ff4c4c;}
+.item-content p{margin-bottom:6px;font-weight:bold;}
+.order-section{margin-top:45px;background:#fff0e6;padding:25px;border-radius:15px;}
+.order-section input,.order-section textarea{width:100%;padding:12px;margin-bottom:12px;border-radius:8px;border:1px solid #ccc;font-size:15px;}
+.order-section button{background:#ff4c4c;color:white;padding:12px 20px;border:none;border-radius:8px;cursor:pointer;font-size:16px;}
+.order-section button:hover{background:#e63939;}
+#orders-list{margin-top:20px;}
+.order-item{background:#ffe6e6;padding:12px;border-radius:10px;margin-bottom:12px;}
+.order-item img{margin-top:10px;border-radius:10px;}
+footer{background:#ff4c4c;color:white;text-align:center;padding:15px;margin-top:30px;}
+.back-home{background:#6b7280;color:white;padding:8px 15px;border:none;border-radius:6px;cursor:pointer;margin-bottom:15px;}
+.back-home:hover{background:#4b5563;}
+/* Modal styles */
+.modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;overflow:auto;background:rgba(0,0,0,0.6);}
+.modal-content{background:#fff;margin:10% auto;padding:20px;border-radius:12px;width:90%;max-width:500px;position:relative;animation:modalFade 0.3s;}
+@keyframes modalFade{0%{transform:scale(0.7);opacity:0;}100%{transform:scale(1);opacity:1;}}
+.close-btn{position:absolute;top:10px;right:15px;font-size:24px;font-weight:bold;color:#ff4c4c;cursor:pointer;}
+.modal img{width:100%;border-radius:10px;margin-bottom:12px;}
+.modal h3{color:#ff4c4c;margin-bottom:6px;}
+.modal p{margin-bottom:8px;}
+.buy-btn{background:#ff4c4c;color:white;padding:10px 18px;border:none;border-radius:8px;cursor:pointer;font-weight:bold;text-decoration:none;display:inline-block;}
+.buy-btn:hover{background:#e63939;}
+@media(max-width:600px){header{justify-content:center;}.hero{font-size:25px;}}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Rita Panthi Cloth Shop</h1>
+  <div class="logo">
+    <img src="logo.png" alt="Shop Logo">
+  </div>
+</header>
+
+<div class="hero">
+  🎇 दिवाली ट्रेंडिंग आइटम्स - ऑर्डर करें अभी! 🎁
+</div>
+
+<div class="container">
+  <h2>Categories</h2>
+  <div class="categories">
+    <button class="category-btn" onclick="showCategory('all')">🏠 Home</button>
+    <button class="category-btn" onclick="showCategory('Kurti')">👗 Ladies Wear</button>
+    <button class="category-btn" onclick="showCategory('Home Decor')">🏡 Home Decor</button>
+    <button class="category-btn" onclick="showCategory('Diwali')">🎆 Diwali Lights</button>
+    <button class="category-btn" onclick="showCategory('Accessories')">💍 Accessories</button>
+  </div>
+
+  <div id="itemsContainer" class="items"></div>
+
+  <div class="order-section">
+    <h2>ऑर्डर सबमिट करें</h2>
+    <input type="text" id="customerName" placeholder="आपका नाम">
+    <input type="text" id="customerPhone" placeholder="मोबाइल नंबर">
+    <textarea id="customerAddress" rows="3" placeholder="पता"></textarea>
+    <input type="file" id="customerPhoto">
+    <button onclick="submitOrder()">ऑर्डर सबमिट करें</button>
+    <div id="orders-list"></div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="itemModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal()">&times;</span>
+    <img id="modalImg" src="" alt="">
+    <h3 id="modalName"></h3>
+    <p id="modalPrice"></p>
+    <a id="whatsappLink" href="#" target="_blank" class="buy-btn">WhatsApp से ऑर्डर करें</a>
+  </div>
+</div>
+
+<footer>
+  &copy; 2025 Rita Panthi Cloth Shop | Created by Nandalal
+</footer>
+
+<script>
+// Items database
+const allItems=[
+  {name:'Silk Kurti', price:850, category:'Kurti', img:'https://images.unsplash.com/photo-1612336307429-8cce1b14a32b?auto=format&fit=crop&w=500&q=80'},
+  {name:'Designer Saree', price:1250, category:'Kurti', img:'https://images.unsplash.com/photo-1622396481323-d3887c5f7c87?auto=format&fit=crop&w=500&q=80'},
+  {name:'Printed Salwar Suit', price:700, category:'Kurti', img:'https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&w=500&q=80'},
+  {name:'Wall Hanging', price:400, category:'Home Decor', img:'https://images.unsplash.com/photo-1623121989504-7b02b3c4a4e1?auto=format&fit=crop&w=500&q=80'},
+  {name:'Candle Stand', price:300, category:'Home Decor', img:'https://images.unsplash.com/photo-1602016754391-c7b1bdfdd5b4?auto=format&fit=crop&w=500&q=80'},
+  {name:'Handmade Vase', price:550, category:'Home Decor', img:'https://images.unsplash.com/photo-1602526217773-43f84e2b9b84?auto=format&fit=crop&w=500&q=80'},
+  {name:'LED String Light', price:250, category:'Diwali', img:'https://images.unsplash.com/photo-1508672019048-805c876b67e2?auto=format&fit=crop&w=500&q=80'},
+  {name:'Lantern Light', price:350, category:'Diwali', img:'https://images.unsplash.com/photo-1572276596231-7de89b2b11e5?auto=format&fit=crop&w=500&q=80'},
+  {name:'Diya Set', price:180, category:'Diwali', img:'https://images.unsplash.com/photo-1602526218056-9c865baf0c3e?auto=format&fit=crop&w=500&q=80'},
+  {name:'Fancy Earrings', price:199, category:'Accessories', img:'https://images.unsplash.com/photo-1616536862040-5be3e6e1b14a?auto=format&fit=crop&w=500&q=80'},
+  {name:'Glass Bangles', price:120, category:'Accessories', img:'https://images.unsplash.com/photo-1596464716127-1c49c6a86994?auto=format&fit=crop&w=500&q=80'},
+  {name:'Ladies Handbag', price:899, category:'Accessories', img:'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=500&q=80'}
+];
+
+// Display items
+function showCategory(category){
+  const container=document.getElementById('itemsContainer');
+  container.innerHTML='';
+  let filtered=category==='all'?allItems:allItems.filter(i=>i.category===category);
+  filtered.forEach(item=>{
+    const div=document.createElement('div');
+    div.className='item';
+    div.innerHTML=`
+      <img src="${item.img}" alt="${item.name}">
+      <div class="item-content">
+        <h3>${item.name}</h3>
+        <p>₹${item.price}</p>
+      </div>`;
+    div.onclick=()=>openModal(item);
+    container.appendChild(div);
+  });
+}
+showCategory('all');
+
+// Modal functions
+function openModal(item){
+  document.getElementById('modalImg').src=item.img;
+  document.getElementById('modalName').innerText=item.name;
+  document.getElementById('modalPrice').innerText='₹'+item.price;
+  const whatsappNumber='6003767008'; // आपका नंबर
+  const text=`हैलो, मैं ${item.name} ऑर्डर करना चाहता हूँ।`;
+  document.getElementById('whatsappLink').href=`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(text)}`;
+  document.getElementById('itemModal').style.display='block';
+}
+function closeModal(){
+  document.getElementById('itemModal').style.display='none';
+}
+
+// Order form
+function submitOrder(){
+  const name=document.getElementById('customerName').value;
+  const phone=document.getElementById('customerPhone').value;
+  const address=document.getElementById('customerAddress').value;
+  const photo=document.getElementById('customerPhoto').files[0];
+
+  if(!name||!phone||!address){
+    alert("कृपया सभी विवरण भरें!");
+    return;
+  }
+
+  let orderHTML=`<div class="order-item"><strong>${name}</strong> (${phone})<br>पता: ${address}<br>`;
+  if(photo){
+    const reader=new FileReader();
+    reader.onload=function(e){
+      orderHTML+=`<img src="${e.target.result}" width="100">`;
+      document.getElementById('orders-list').innerHTML+=orderHTML+'</div>';
+    }
+    reader.readAsDataURL(photo);
+  }else{
+    document.getElementById('orders-list').innerHTML+=orderHTML+'</div>';
+  }
+  document.getElementById('customerName').value='';
+  document.getElementById('customerPhone').value='';
+  document.getElementById('customerAddress').value='';
+  document.getElementById('customerPhoto').value='';
+  alert("✅ आपका ऑर्डर सबमिट हो गया!");
+}
+</script>
+</body>
+</html>
